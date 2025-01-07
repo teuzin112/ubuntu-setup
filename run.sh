@@ -54,12 +54,6 @@ if ! grep -q 'pyenv init' ~/.bashrc; then
     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.bashrc
 fi
 
-# Install Visual Studio Code
-echo "Installing Visual Studio Code..."
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/packages.microsoft.gpg >/dev/null
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-sudo apt update && sudo apt install -y code
-
 # Cleanup
 echo "Cleaning up..."
 sudo apt autoremove -y
