@@ -53,6 +53,8 @@ echo '######## Installing Python 3.12.0 and set as global #######'
 echo '##########################################################'
 echo '     ###############################################'
 username=$(logname)
+
+exec $SHELL
 pyenv install 3.12.0
 pyenv global 3.12.0
 
