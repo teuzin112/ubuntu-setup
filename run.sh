@@ -54,10 +54,6 @@ echo '##########################################################'
 echo '     ###############################################'
 username=$(logname)
 
-exec $SHELL
-pyenv install 3.12.0
-pyenv global 3.12.0
-
 # Cleanup
 echo "Cleaning up..."
 sudo apt autoremove -y
