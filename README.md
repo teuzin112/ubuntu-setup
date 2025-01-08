@@ -28,7 +28,7 @@ This repository contains a setup script to install essential tools for a geospat
    sudo ./run.sh
    ```
 
-## Supported Operating System
+## Tested Ubuntu Versions
 
 This script has been tested on:
 - **Ubuntu 22.04.5 LTS**
