@@ -15,22 +15,21 @@ sudo systemctl enable postgresql
 sudo systemctl start postgresql
 
 # Install pgAdmin Desktop
-echo "Installing pgAdmin Desktop..."
 sudo apt install -y wget curl
-gpg_key="https://www.pgadmin.org/static/packages_pgadmin_org.pub"
-echo "Adding pgAdmin repository..."
-wget -qO- $gpg_key | gpg --dearmor > packages_pgadmin_org.gpg
-sudo install -o root -g root -m 644 packages_pgadmin_org.gpg /etc/apt/trusted.gpg.d/
-echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/jammy pgadmin4 main" | sudo tee /etc/apt/sources.list.d/pgadmin4.list
-sudo apt update && sudo apt install -y pgadmin4-desktop
+
+echo "Installing pgAdmin Desktop..."
+# Install the public key for the repository (if not done previously):
+curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
+# Create the repository configuration file:
+sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+# Install for desktop mode only:
+sudo apt install pgadmin4-desktop
 
 # Install QGIS
 echo "Installing QGIS..."
-sudo apt install -y software-properties-common
-echo "deb [signed-by=/usr/share/keyrings/qgis-archive.gpg] https://qgis.org/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/qgis.list
-echo "Adding QGIS repository key..."
-wget -qO - https://qgis.org/downloads/qgis-archive.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/qgis-archive.gpg >/dev/null
-sudo apt update && sudo apt install -y qgis qgis-plugin-grass
+sudo apt install gnupg software-properties-common
+sudo wget -O /etc/apt/keyrings/qgis-archive-keyring.gpg https://download.qgis.org/downloads/qgis-archive-keyring.gpg
+sudo apt install qgis qgis-plugin-grass
 
 # Install pyenv dependencies
 echo "Installing pyenv dependencies..."
@@ -41,18 +40,21 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev \
 
 # Install pyenv
 echo "Installing pyenv..."
-if [ ! -d "$HOME/.pyenv" ]; then
-    curl https://pyenv.run | bash
-else
-    echo "pyenv is already installed."
-fi
+username=$(logname)
+echo 'export PATH="/home/'$username'/.pyenv/bin:$PATH"'>>/home/$username/.bashrc
+echo 'eval "$(pyenv init -)"'>>/home/$username/.bashrc
+echo 'eval "$(pyenv virtualenv-init -)"'>>/home/$username/.bashrc
+curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | sudo -u $username bash
 
-# Add pyenv to shell
-if ! grep -q 'pyenv init' ~/.bashrc; then
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.bashrc
-fi
+export PATH="/home/$USER/.pyenv/bin:$PATH"
+eval "$(/home/$USER/.pyenv/bin/pyenv init -)"
+eval "$(/home/$USER/.pyenv/bin/pyenv virtualenv-init -)"
+echo '######## Installing Python 3.9.0 and set as global #######'
+echo '##########################################################'
+echo '     ###############################################'
+username=$(logname)
+pyenv install 3.12.0
+pyenv global 3.12.0
 
 # Cleanup
 echo "Cleaning up..."
