@@ -23,13 +23,13 @@ curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --d
 # Create the repository configuration file:
 sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
 # Install for desktop mode only:
-sudo apt install pgadmin4-desktop
+sudo apt install -y pgadmin4-desktop
 
 # Install QGIS
 echo "Installing QGIS..."
-sudo apt install gnupg software-properties-common
+sudo apt install -y gnupg software-properties-common
 sudo wget -O /etc/apt/keyrings/qgis-archive-keyring.gpg https://download.qgis.org/downloads/qgis-archive-keyring.gpg
-sudo apt install qgis qgis-plugin-grass
+sudo apt install -y qgis qgis-plugin-grass
 
 # Install pyenv dependencies
 echo "Installing pyenv dependencies..."
