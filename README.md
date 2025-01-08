@@ -3,7 +3,7 @@
 This repository contains a setup script to install essential tools for a geospatial development environment on Ubuntu. The script installs:
 
 - **QGIS**: A free and open-source Geographic Information System.
-- **Pyenv**: A Python version management tool.
+- **Pyenv**: A Python version management tool, alongside with python 3.12.0.
 - **pgAdmin4 Desktop**: A graphical management tool for PostgreSQL.
 
 ## Installation Instructions
