@@ -5,6 +5,8 @@ set -e  # Exit on any error
 # Update and upgrade packages
 echo "Updating and upgrading system packages..."
 sudo apt update && sudo apt upgrade -y
+# Install pgAdmin Desktop
+sudo apt install -y wget curl
 
 # Install PostgreSQL and PostGIS
 echo "Installing PostgreSQL and PostGIS..."
@@ -14,8 +16,6 @@ sudo apt install -y postgresql postgresql-contrib postgis
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 
-# Install pgAdmin Desktop
-sudo apt install -y wget curl
 
 echo "Installing pgAdmin Desktop..."
 # Install the public key for the repository (if not done previously):
@@ -42,15 +42,22 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev \
 echo "Installing pyenv..."
 username=$(logname)
 pyenv_root="/home/$username/.pyenv"
-export PATH="$pyenv_root/bin:$PATH"
 
 sudo -u $username bash <<EOF
+    # Install pyenv
     curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-    echo 'export PATH="$pyenv_root/bin:\$PATH"' >> /home/$username/.bashrc
-    echo 'eval "\$(pyenv init --path)"' >> /home/$username/.bashrc
-    echo 'eval "\$(pyenv init -)"' >> /home/$username/.bashrc
-    echo 'eval "\$(pyenv virtualenv-init -)"' >> /home/$username/.bashrc
-    source /home/$username/.bashrc
+
+    # Add pyenv configuration to .bashrc
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'export PATH="\$PYENV_ROOT/bin:\$PATH"' >> ~/.bashrc
+    echo 'eval "\$(pyenv init --path)"' >> ~/.bashrc
+    echo 'eval "\$(pyenv init -)"' >> ~/.bashrc
+    echo 'eval "\$(pyenv virtualenv-init -)"' >> ~/.bashrc
+
+    # Source .bashrc to make pyenv available in this shell
+    source ~/.bashrc
+
+    # Install Python 3.12.0 using pyenv
     pyenv install 3.12.0
     pyenv global 3.12.0
 EOF
