@@ -41,21 +41,19 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev \
 # Install pyenv
 echo "Installing pyenv..."
 username=$(logname)
-echo 'export PATH="/home/'$username'/.pyenv/bin:$PATH"'>>/home/$username/.bashrc
-echo 'eval "$(pyenv init -)"'>>/home/$username/.bashrc
-echo 'eval "$(pyenv virtualenv-init -)"'>>/home/$username/.bashrc
-curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | sudo -u $username bash
+pyenv_root="/home/$username/.pyenv"
+export PATH="$pyenv_root/bin:$PATH"
 
-export PATH="/home/$USER/.pyenv/bin:$PATH"
-eval "$(/home/$USER/.pyenv/bin/pyenv init -)"
-eval "$(/home/$USER/.pyenv/bin/pyenv virtualenv-init -)"
-echo '######## Installing Python 3.12.0 and set as global #######'
-echo '##########################################################'
-echo '     ###############################################'
-username=$(logname)
-
-pyenv install 3.12.0
-pyenv global 3.12.0
+sudo -u $username bash <<EOF
+    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+    echo 'export PATH="$pyenv_root/bin:\$PATH"' >> /home/$username/.bashrc
+    echo 'eval "\$(pyenv init --path)"' >> /home/$username/.bashrc
+    echo 'eval "\$(pyenv init -)"' >> /home/$username/.bashrc
+    echo 'eval "\$(pyenv virtualenv-init -)"' >> /home/$username/.bashrc
+    source /home/$username/.bashrc
+    pyenv install 3.12.0
+    pyenv global 3.12.0
+EOF
 
 # Cleanup
 echo "Cleaning up..."
