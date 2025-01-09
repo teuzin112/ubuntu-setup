@@ -41,26 +41,12 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev \
 # Install pyenv
 echo "Installing pyenv..."
 username=$(logname)
-pyenv_root="/home/$username/.pyenv"
+echo 'export PATH="/home/'$username'/.pyenv/bin:$PATH"'>>/home/$username/.bashrc
+echo 'eval "$(pyenv init -)"'>>/home/$username/.bashrc
+echo 'eval "$(pyenv virtualenv-init -)"'>>/home/$username/.bashrc
+curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | sudo -u $username bash
 
-sudo -u $username bash <<EOF
-    # Install pyenv
-    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-
-    # Add pyenv configuration to .bashrc
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-    echo 'export PATH="\$PYENV_ROOT/bin:\$PATH"' >> ~/.bashrc
-    echo 'eval "\$(pyenv init --path)"' >> ~/.bashrc
-    echo 'eval "\$(pyenv init -)"' >> ~/.bashrc
-    echo 'eval "\$(pyenv virtualenv-init -)"' >> ~/.bashrc
-
-    # Source .bashrc to make pyenv available in this shell
-    source ~/.bashrc
-
-    # Install Python 3.12.0 using pyenv
-    pyenv install 3.12.0
-    pyenv global 3.12.0
-EOF
+su $username -c "./pyenv_install.sh"
 
 # Cleanup
 echo "Cleaning up..."
