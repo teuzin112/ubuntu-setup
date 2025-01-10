@@ -21,6 +21,7 @@ This repository contains a setup script to install essential tools for a geospat
 3. Make the script executable:
    ```bash
    sudo chmod a+x ./run.sh
+   sudo chmod a+x ./pyenv_install
    ```
 
 4. Run the script:
@@ -32,3 +33,4 @@ This repository contains a setup script to install essential tools for a geospat
 
 This script has been tested on:
 - **Ubuntu 22.04.5 LTS**
+- **Ubuntu 24.04.1 LTS**
